@@ -299,7 +299,7 @@
                     <property name="can-focus">True</property>
                     <property name="shadow-type">in</property>
                     <property name="min-content-width">256</property>
-                    <property name="min-content-height">512</property>
+                    <property name="min-content-height">256</property>
                     <property name="max-content-width">256</property>
                     <property name="propagate-natural-height">True</property>
                     <child>
@@ -325,11 +325,20 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="shadow-type">in</property>
+                    <property name="min-content-width">256</property>
+                    <property name="min-content-height">128</property>
+                    <property name="propagate-natural-height">True</property>
                     <child>
                       <object class="GtkTreeView" id="map_infos">
                         <property name="height-request">128</property>
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Select from a list of maps.</property>
+                        <property name="reorderable">True</property>
+                        <property name="search-column">1</property>
+                        <property name="enable-grid-lines">horizontal</property>
+                        <property name="enable-tree-lines">True</property>
                       </object>
                     </child>
                   </object>

@@ -23,6 +23,10 @@ class LuminolWindow < Gtk::ApplicationWindow
     open_button.signal_connect 'clicked' do |button, app|
       open_project
     end
+
+    map_infos.signal_connect "cursor-changed" do |tree|
+      change_map(tree)
+    end
   end
 
   def enable_widgets
@@ -46,11 +50,10 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
 
-    iters = [model.append(nil)]
-    iters.last[name_col] = "Root"
+    iters = []
     System.mapinfos.each do |id, mapinfo|
-      if iters.last[id_col] != mapinfo.parent_id
-        until iters.last[id_col] == mapinfo.parent_id
+      if iters.last && (iters.last[id_col] != mapinfo.parent_id)
+        until iters.last.nil? || iters.last[id_col] == mapinfo.parent_id
           iters.pop
         end
       end
@@ -64,10 +67,18 @@ class LuminolWindow < Gtk::ApplicationWindow
   end
 
   def create_mapinfos_renderer
-    renderer = Gtk::CellRendererText.new
+    name_renderer = Gtk::CellRendererText.new
     map_infos.insert_column(
-      -1, "Map", renderer, text: 1
+      -1, "Map", name_renderer, text: 1
     )
+    #id_renderer = Gtk::CellRendererText.new
+    #map_infos.insert_column(
+    #  -1, "ID", id_renderer, text: 0
+    #)
+  end
+
+  def change_map(tree)
+    puts tree.selection
   end
 
   def open_project

@@ -9,3 +9,4 @@
 
 # rspec failure tracking
 .rspec_status
+lib/luminol/ui/luminol.glade~
