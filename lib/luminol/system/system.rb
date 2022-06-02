@@ -23,5 +23,10 @@ module System
         return Marshal.load(file)
       end
     end
+
+    def load_map(id)
+      map = "Map#{id.to_s.rjust(3, "0")}"
+      load_file(map)
+    end
   end
 end

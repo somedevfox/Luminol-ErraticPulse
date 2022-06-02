@@ -9,6 +9,9 @@ class LuminolWindow < Gtk::ApplicationWindow
                        sound_test_button test_button tile_picker map_infos map pencil_button rectangle_button
                        circle_button fill_button map_label coords].freeze
 
+  ID_COL = 0
+  NAME_COL = 1
+
   def self.init
     set_template resource: '/com/nowaffles/luminol/ui/luminol.glade'
 
@@ -45,21 +48,19 @@ class LuminolWindow < Gtk::ApplicationWindow
     model = Gtk::TreeStore.new(
       Integer, String
     )
-    id_col = 0
-    name_col = 1
 
     System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
 
     iters = []
     System.mapinfos.each do |id, mapinfo|
-      if iters.last && (iters.last[id_col] != mapinfo.parent_id)
-        until iters.last.nil? || iters.last[id_col] == mapinfo.parent_id
+      if iters.last && (iters.last[ID_COL] != mapinfo.parent_id)
+        while iters.last && iters.last[ID_COL] != mapinfo.parent_id
           iters.pop
         end
       end
       iter = model.append iters.last
-      iter[id_col] = id
-      iter[name_col] = mapinfo.name
+      iter[ID_COL] = id
+      iter[NAME_COL] = mapinfo.name
       iters << iter
     end
 
@@ -69,16 +70,19 @@ class LuminolWindow < Gtk::ApplicationWindow
   def create_mapinfos_renderer
     name_renderer = Gtk::CellRendererText.new
     map_infos.insert_column(
-      -1, "Map", name_renderer, text: 1
+      -1, "Map", name_renderer, text: NAME_COL
     )
     #id_renderer = Gtk::CellRendererText.new
     #map_infos.insert_column(
-    #  -1, "ID", id_renderer, text: 0
+    #  -1, "ID", id_renderer, text: ID_COL
     #)
   end
 
   def change_map(tree)
-    puts tree.selection
+    tree.selection.each do |_, _, iter|
+      System.map = System.load_map(iter[ID_COL])
+    end
+
   end
 
   def open_project
