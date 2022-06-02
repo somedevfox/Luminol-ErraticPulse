@@ -102,7 +102,10 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     dialog.destroy
 
-    create_mapinfos_tree
-    enable_widgets
+      create_mapinfos_tree
+      enable_widgets
+    end
+
+    dialog.destroy
   end
 end
