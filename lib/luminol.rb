@@ -12,7 +12,6 @@ module Luminol
       puts app.run
     rescue Exception => e
       raise e
-
       dialog = Gtk::MessageDialog.new(
         buttons: :ok_cancel,
         message_type: :error

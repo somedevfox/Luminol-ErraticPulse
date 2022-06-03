@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative '../system/system'
+require_relative 'tilemap'
 
 class LuminolWindow < Gtk::ApplicationWindow
   type_register
@@ -23,12 +24,18 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     create_mapinfos_renderer
 
+    @tilemap = Tilemap.new
+
     open_button.signal_connect 'clicked' do |button, app|
       open_project
     end
 
     map_infos.signal_connect "cursor-changed" do |tree|
       change_map(tree)
+    end
+
+    tile_picker.signal_connect "draw" do |widget, ctx|
+      tilepicker_draw widget, ctx
     end
   end
 
@@ -82,7 +89,22 @@ class LuminolWindow < Gtk::ApplicationWindow
     tree.selection.each do |_, _, iter|
       System.map = System.load_map(iter[ID_COL])
     end
+    tile_picker.queue_draw
+    map.queue_draw
+  end
 
+  def tilepicker_draw(widget, ctx)
+    return if System.map.nil?
+    image = System::Cache.load_image(
+      "Graphics", "Tilesets",
+      System.tilesets[System.map.tileset_id].tileset_name
+    )
+    ctx.set_source_pixbuf image, 0, 32
+    ctx.paint
+    ctx.destroy
+
+    widget.width_request = image.width
+    widget.height_request = image.height + 32
   end
 
   def open_project
