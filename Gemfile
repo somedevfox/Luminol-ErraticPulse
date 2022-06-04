@@ -6,5 +6,5 @@ source "https://rubygems.org"
 gemspec
 
 gem "gtk3"
-gem "opengl-bindings"
+gem "opengl-bindings2"
 gem "rake"

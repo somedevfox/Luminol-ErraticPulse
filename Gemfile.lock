@@ -38,7 +38,7 @@ GEM
       pango (= 3.5.1)
     matrix (0.4.2)
     native-package-installer (1.1.4)
-    opengl-bindings (1.6.12)
+    opengl-bindings2 (2.0.0)
     pango (3.5.1)
       cairo-gobject (= 3.5.1)
       gobject-introspection (= 3.5.1)
@@ -53,7 +53,7 @@ PLATFORMS
 DEPENDENCIES
   gtk3
   luminol!
-  opengl-bindings
+  opengl-bindings2
   rake
 
 BUNDLED WITH

@@ -24,7 +24,7 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     create_mapinfos_renderer
 
-    @tilemap = Tilemap.new
+    @tilemap = Tilemap.new(map)
 
     open_button.signal_connect 'clicked' do |button, app|
       open_project
@@ -36,6 +36,18 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     tile_picker.signal_connect "draw" do |widget, ctx|
       tilepicker_draw widget, ctx
+    end
+
+    map.signal_connect "draw" do |widget, ctx|
+      @tilemap.draw widget, ctx
+    end
+
+    map.add_tick_callback do |_, clock|
+      if clock.frame_time % 30 == 0
+        @tilemap.ani_index += 1
+        map.queue_draw
+      end
+      GLib::Source::CONTINUE
     end
   end
 
@@ -86,11 +98,18 @@ class LuminolWindow < Gtk::ApplicationWindow
   end
 
   def change_map(tree)
+    map_id = 0
     tree.selection.each do |_, _, iter|
       System.map = System.load_map(iter[ID_COL])
+      map_id = iter[ID_COL]
     end
+    return if System.map.nil?
+
+    @tilemap.prepare
     tile_picker.queue_draw
     map.queue_draw
+
+    map_label.text = "Map #{map_id.to_s.rjust(3, "0")}: (#{System.map.width}, #{System.map.height})"
   end
 
   def tilepicker_draw(widget, ctx)
