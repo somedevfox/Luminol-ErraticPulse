@@ -8,3 +8,4 @@ gemspec
 gem "gtk3"
 gem "opengl-bindings2"
 gem "rake"
+gem "optparse"

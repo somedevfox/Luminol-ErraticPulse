@@ -5,7 +5,7 @@ require 'gtk3'
 require_relative 'autotiles'
 require_relative '../system/system'
 
-class Tilemap
+class SoftwareTilemap
   attr_reader :ani_index
 
   BLANK_AUTOTILE = GdkPixbuf::Pixbuf.new(

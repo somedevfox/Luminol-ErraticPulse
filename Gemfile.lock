@@ -39,6 +39,7 @@ GEM
     matrix (0.4.2)
     native-package-installer (1.1.4)
     opengl-bindings2 (2.0.0)
+    optparse (0.2.0)
     pango (3.5.1)
       cairo-gobject (= 3.5.1)
       gobject-introspection (= 3.5.1)
@@ -54,6 +55,7 @@ DEPENDENCIES
   gtk3
   luminol!
   opengl-bindings2
+  optparse
   rake
 
 BUNDLED WITH

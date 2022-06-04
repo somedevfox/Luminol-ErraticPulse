@@ -2,5 +2,14 @@
 
 require "bundler/setup"
 require "luminol"
+require 'optparse'
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: luminol [options] [path]"
+
+  opts.on("--software-tilemap") do
+    $software_tilemap = true
+  end
+end
 
 Luminol.start

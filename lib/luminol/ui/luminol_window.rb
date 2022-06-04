@@ -1,6 +1,11 @@
 require 'gtk3'
 require_relative '../system/system'
-require_relative 'tilemap'
+
+if $software_tilemap
+  require_relative 'software_tilemap'
+else
+  require_relative 'software_tilemap'
+end
 
 class LuminolWindow < Gtk::ApplicationWindow
   type_register
@@ -24,7 +29,7 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     create_mapinfos_renderer
 
-    @tilemap = Tilemap.new(map)
+    @tilemap = SoftwareTilemap.new(map)
 
     open_button.signal_connect 'clicked' do |button, app|
       open_project
