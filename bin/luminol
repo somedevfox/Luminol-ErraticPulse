@@ -10,6 +10,6 @@ OptionParser.new do |opts|
   opts.on("--software-tilemap") do
     $software_tilemap = true
   end
-end
+end.parse!
 
 Luminol.start

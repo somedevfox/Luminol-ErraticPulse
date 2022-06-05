@@ -1,11 +1,8 @@
-require 'opengl'
-GL.load_lib
-
 require 'gtk3'
 require_relative 'autotiles'
 require_relative '../system/system'
 
-class SoftwareTilemap
+class Tilemap
   attr_reader :ani_index
 
   BLANK_AUTOTILE = GdkPixbuf::Pixbuf.new(
@@ -15,6 +12,18 @@ class SoftwareTilemap
   def initialize(area)
     @ani_index = 0
     @area = area
+
+    area.signal_connect "draw" do |widget, ctx|
+      self.draw widget, ctx
+    end
+
+    area.add_tick_callback do |_, clock|
+      if clock.frame_time % 30 == 0
+        self.ani_index += 1
+        @area.queue_draw
+      end
+      GLib::Source::CONTINUE
+    end
   end
 
   def ani_index=(val)
@@ -45,6 +54,7 @@ class SoftwareTilemap
 
     @area.width_request = @map.width * 32
     @area.height_request = @map.height * 32
+    @area.queue_draw
   end
 
   def draw(_, ctx)

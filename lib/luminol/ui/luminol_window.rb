@@ -1,12 +1,6 @@
 require 'gtk3'
 require_relative '../system/system'
 
-if $software_tilemap
-  require_relative 'software_tilemap'
-else
-  require_relative 'software_tilemap'
-end
-
 class LuminolWindow < Gtk::ApplicationWindow
   type_register
 
@@ -25,11 +19,17 @@ class LuminolWindow < Gtk::ApplicationWindow
   end
 
   def initialize(app)
+    if $software_tilemap
+      require_relative 'software_tilemap'
+    else
+      require_relative 'hardware_tilemap'
+    end
+
     super application: app
 
     create_mapinfos_renderer
 
-    @tilemap = SoftwareTilemap.new(map)
+    @tilemap = Tilemap.new(map)
 
     open_button.signal_connect 'clicked' do |button, app|
       open_project
@@ -41,18 +41,6 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     tile_picker.signal_connect "draw" do |widget, ctx|
       tilepicker_draw widget, ctx
-    end
-
-    map.signal_connect "draw" do |widget, ctx|
-      @tilemap.draw widget, ctx
-    end
-
-    map.add_tick_callback do |_, clock|
-      if clock.frame_time % 30 == 0
-        @tilemap.ani_index += 1
-        map.queue_draw
-      end
-      GLib::Source::CONTINUE
     end
   end
 
@@ -112,7 +100,6 @@ class LuminolWindow < Gtk::ApplicationWindow
 
     @tilemap.prepare
     tile_picker.queue_draw
-    map.queue_draw
 
     map_label.text = "Map #{map_id.to_s.rjust(3, "0")}: (#{System.map.width}, #{System.map.height})"
   end
