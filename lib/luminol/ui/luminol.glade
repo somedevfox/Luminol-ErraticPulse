@@ -339,6 +339,9 @@
                         <property name="search-column">1</property>
                         <property name="enable-grid-lines">horizontal</property>
                         <property name="enable-tree-lines">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection"/>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -364,7 +367,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkDrawingArea" id="map">
+                      <object class="GtkGLArea" id="map">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                       </object>

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "luminol"
+require_relative "../lib/luminol"
 require 'optparse'
 
 OptionParser.new do |opts|
@@ -12,4 +12,5 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+$0 = "Luminol"
 Luminol.start
