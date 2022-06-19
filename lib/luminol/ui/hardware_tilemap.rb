@@ -1,5 +1,8 @@
 require 'opengl'
+require 'gtk3'
 GL.load_lib
+
+MAX_C = 65535.0
 
 class Tilemap
   def initialize(area)
@@ -15,7 +18,9 @@ class Tilemap
   end
 
   def render(area, context)
-    GL.ClearColor(0.85, 0.85, 0.85, 1)
+    color = area.style.lookup_color("theme_bg_color")[1]
+    puts color.to_s
+    GL.ClearColor(color.red / MAX_C, color.green / MAX_C, color.blue / MAX_C, 1)
     GL.Clear(GL::COLOR_BUFFER_BIT)
     GL.Flush
     true

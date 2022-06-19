@@ -12,7 +12,7 @@
     <property name="title" translatable="yes">Luminol</property>
     <property name="default-width">960</property>
     <property name="default-height">540</property>
-    <property name="icon">assets\icon.png</property>
+    <property name="icon">assets/icon.png</property>
     <child>
       <object class="GtkBox" id="LuminolMainBox">
         <property name="visible">True</property>
