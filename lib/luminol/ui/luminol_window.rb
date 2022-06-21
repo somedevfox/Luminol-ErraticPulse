@@ -28,6 +28,7 @@ class LuminolWindow < Gtk::ApplicationWindow
     super application: app
 
     create_mapinfos_renderer
+    create_mapinfos_tree
 
     @tilemap = Tilemap.new(map)
 
@@ -56,24 +57,30 @@ class LuminolWindow < Gtk::ApplicationWindow
     end
   end
 
+  def create_layers_list
+
+  end
+
   def create_mapinfos_tree
     model = Gtk::TreeStore.new(
       Integer, String
     )
 
-    System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
+    if System.mapinfos
+      System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
 
-    iters = []
-    System.mapinfos.each do |id, mapinfo|
-      if iters.last && (iters.last[ID_COL] != mapinfo.parent_id)
-        while iters.last && iters.last[ID_COL] != mapinfo.parent_id
-          iters.pop
+      iters = []
+      System.mapinfos.each do |id, mapinfo|
+        if iters.last && (iters.last[ID_COL] != mapinfo.parent_id)
+          while iters.last && iters.last[ID_COL] != mapinfo.parent_id
+            iters.pop
+          end
         end
+        iter = model.append iters.last
+        iter[ID_COL] = id
+        iter[NAME_COL] = mapinfo.name
+        iters << iter
       end
-      iter = model.append iters.last
-      iter[ID_COL] = id
-      iter[NAME_COL] = mapinfo.name
-      iters << iter
     end
 
     map_infos.model = model
@@ -102,6 +109,7 @@ class LuminolWindow < Gtk::ApplicationWindow
     tile_picker.queue_draw
 
     map_label.text = "Map #{map_id.to_s.rjust(3, "0")}: (#{System.map.width}, #{System.map.height})"
+    create_layers_list
   end
 
   def tilepicker_draw(widget, ctx)

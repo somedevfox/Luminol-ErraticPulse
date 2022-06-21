@@ -19,7 +19,7 @@ class Tilemap
 
   def render(area, context)
     color = area.style.lookup_color("theme_bg_color")[1]
-    puts color.to_s
+
     GL.ClearColor(color.red / MAX_C, color.green / MAX_C, color.blue / MAX_C, 1)
     GL.Clear(GL::COLOR_BUFFER_BIT)
     GL.Flush

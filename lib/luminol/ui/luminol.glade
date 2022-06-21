@@ -2,14 +2,8 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkAdjustment" id="ScaleAdjustment">
-    <property name="lower">25</property>
-    <property name="upper">150</property>
-    <property name="value">100</property>
-  </object>
   <template class="LuminolWindow" parent="GtkApplicationWindow">
     <property name="can-focus">False</property>
-    <property name="title" translatable="yes">Luminol</property>
     <property name="default-width">960</property>
     <property name="default-height">540</property>
     <property name="icon">assets/icon.png</property>
@@ -145,41 +139,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolItem" id="LayersMenuWrapper">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes">View layers, toggle them on and off, set working layer.</property>
-                <child>
-                  <object class="GtkComboBox" id="layers_menu">
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">False</property>
-                    <property name="has-entry">True</property>
-                    <child internal-child="entry">
-                      <object class="GtkEntry">
-                        <property name="can-focus">False</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSeparatorToolItem" id="LayersSeparator">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkToolItem" id="ScaleSliderWrapper">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -194,7 +153,7 @@
                     <property name="lower-stepper-sensitivity">on</property>
                     <property name="upper-stepper-sensitivity">on</property>
                     <property name="fill-level">150</property>
-                    <property name="round-digits">1</property>
+                    <property name="round-digits">0</property>
                     <property name="digits">0</property>
                     <property name="value-pos">right</property>
                   </object>
@@ -290,6 +249,8 @@
                 <property name="width-request">256</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="margin-start">4</property>
+                <property name="margin-end">4</property>
                 <property name="orientation">vertical</property>
                 <property name="wide-handle">True</property>
                 <child>
@@ -362,6 +323,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="shadow-type">in</property>
+                <property name="min-content-width">512</property>
                 <child>
                   <object class="GtkViewport" id="MapViewport">
                     <property name="visible">True</property>
@@ -378,8 +340,35 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="pack-type">end</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="LayersMenuScroller">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-end">4</property>
+                <property name="shadow-type">in</property>
+                <property name="min-content-width">256</property>
+                <child>
+                  <object class="GtkViewport" id="LayersMenuViewport">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkListBox" id="layers_menu">
+                        <property name="name">layers_menu</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -416,7 +405,6 @@
                 <property name="label" translatable="yes">Rectangle</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">image-x-generic</property>
-                <property name="active">True</property>
                 <property name="group">pencil_button</property>
               </object>
               <packing>
@@ -432,7 +420,6 @@
                 <property name="label" translatable="yes">Circle</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">media-optical-bd-symbolic</property>
-                <property name="active">True</property>
                 <property name="group">pencil_button</property>
               </object>
               <packing>
@@ -448,7 +435,6 @@
                 <property name="label" translatable="yes">Fill</property>
                 <property name="use-underline">True</property>
                 <property name="icon-name">text-editor-symbolic</property>
-                <property name="active">True</property>
                 <property name="group">pencil_button</property>
               </object>
               <packing>
@@ -474,6 +460,10 @@
                   <object class="GtkLabel" id="map_label">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-left">5</property>
+                    <property name="margin-right">5</property>
+                    <property name="margin-start">5</property>
+                    <property name="margin-end">5</property>
                     <property name="label" translatable="yes">Map 000: (0 x 0)</property>
                   </object>
                 </child>
@@ -501,6 +491,8 @@
                   <object class="GtkLabel" id="coords">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-left">5</property>
+                    <property name="margin-start">5</property>
                     <property name="label" translatable="yes">(0, 0)</property>
                   </object>
                 </child>
@@ -521,4 +513,9 @@
       </object>
     </child>
   </template>
+  <object class="GtkAdjustment" id="ScaleAdjustment">
+    <property name="lower">25</property>
+    <property name="upper">150</property>
+    <property name="value">100</property>
+  </object>
 </interface>
