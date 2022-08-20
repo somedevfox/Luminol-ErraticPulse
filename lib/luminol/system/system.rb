@@ -33,7 +33,7 @@ module System
 
   module Cache
     @cache = {}
-    @autotiles_cache = {}
+    @surf_cache = {}
 
     def self.load_image(*paths)
       path = File.join(System.working_directory, *paths) + ".png"
@@ -45,6 +45,19 @@ module System
         file: path
       )
       @cache[path] = buf
+    end
+
+    def self.load_image_surf(*paths)
+      path = File.join(System.working_directory, *paths) + ".png"
+
+      if @surf_cache.include?(path)
+        return @surf_cache[path]
+      end
+
+      surf = Cairo::ImageSurface.from_png(
+        path
+      )
+      @surf_cache[path] = surf
     end
   end
 end

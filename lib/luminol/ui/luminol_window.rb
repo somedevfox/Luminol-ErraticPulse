@@ -1,6 +1,5 @@
 require 'gtk3'
 require_relative '../system/system'
-require_relative 'tilemap'
 
 class LuminolWindow < Gtk::ApplicationWindow
   type_register
@@ -20,11 +19,18 @@ class LuminolWindow < Gtk::ApplicationWindow
   end
 
   def initialize(app)
+    if $software_tilemap
+      require_relative 'software_tilemap'
+    else
+      require_relative 'hardware_tilemap'
+    end
+
     super application: app
 
     create_mapinfos_renderer
+    create_mapinfos_tree
 
-    @tilemap = Tilemap.new
+    @tilemap = Tilemap.new(map)
 
     open_button.signal_connect 'clicked' do |button, app|
       open_project
@@ -51,24 +57,30 @@ class LuminolWindow < Gtk::ApplicationWindow
     end
   end
 
+  def create_layers_list
+
+  end
+
   def create_mapinfos_tree
     model = Gtk::TreeStore.new(
       Integer, String
     )
 
-    System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
+    if System.mapinfos
+      System.mapinfos = System.mapinfos.sort_by { |_, m| m.order }
 
-    iters = []
-    System.mapinfos.each do |id, mapinfo|
-      if iters.last && (iters.last[ID_COL] != mapinfo.parent_id)
-        while iters.last && iters.last[ID_COL] != mapinfo.parent_id
-          iters.pop
+      iters = []
+      System.mapinfos.each do |id, mapinfo|
+        if iters.last && (iters.last[ID_COL] != mapinfo.parent_id)
+          while iters.last && iters.last[ID_COL] != mapinfo.parent_id
+            iters.pop
+          end
         end
+        iter = model.append iters.last
+        iter[ID_COL] = id
+        iter[NAME_COL] = mapinfo.name
+        iters << iter
       end
-      iter = model.append iters.last
-      iter[ID_COL] = id
-      iter[NAME_COL] = mapinfo.name
-      iters << iter
     end
 
     map_infos.model = model
@@ -86,11 +98,18 @@ class LuminolWindow < Gtk::ApplicationWindow
   end
 
   def change_map(tree)
+    map_id = 0
     tree.selection.each do |_, _, iter|
       System.map = System.load_map(iter[ID_COL])
+      map_id = iter[ID_COL]
     end
+    return if System.map.nil?
+
+    @tilemap.prepare
     tile_picker.queue_draw
-    map.queue_draw
+
+    map_label.text = "Map #{map_id.to_s.rjust(3, "0")}: (#{System.map.width}, #{System.map.height})"
+    create_layers_list
   end
 
   def tilepicker_draw(widget, ctx)

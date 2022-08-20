@@ -1,6 +1,16 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "luminol"
+require_relative "../lib/luminol"
+require 'optparse'
 
+OptionParser.new do |opts|
+  opts.banner = "Usage: luminol [options] [path]"
+
+  opts.on("--software-tilemap") do
+    $software_tilemap = true
+  end
+end.parse!
+
+$0 = "Luminol"
 Luminol.start
